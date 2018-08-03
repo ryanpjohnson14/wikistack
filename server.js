@@ -1,28 +1,15 @@
-const express = require('express');
-const morgan = require('morgan');
-const models = require('./models');
+const http = require('http');
+const app = require('./app');
+const server = http.createServer(app);
+const db = require('./models');
 
-const app = new express();
+const PORT = 3000;
 
-
-
-const PORT = 1337;
-
-const init = async()=>{
-  await models.User.sync();
-  await models.Page.sync();
-  app.listen(PORT, () => {
-    console.log(`Node Server is listening on port + ${PORT}`);
+const init = async () => {
+  await db.sync({ force: true });
+  server.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}!`);
   });
-}
+};
 
 init();
-
-Page.belongsTo(User);
-User.hasMany(Page);
-
-db.sync();
-
-module.exports = {
-  init
-}
