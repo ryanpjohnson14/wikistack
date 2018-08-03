@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const db = new Sequelize('postgres://localhost/5432/wikistack', {logging: false});
+const db = new Sequelize('postgres://localhost:5432/wikistack', {logging: false});
 
 const Page = db.define('page', {
   title: {
@@ -18,6 +18,18 @@ const Page = db.define('page', {
     'open', 'closed')
   }
 });
+
+
+
+
+const slugify = (str) => {
+  res = str.replace(/\s+/g, '_').replace(/\W/g, '');
+  return res;
+}
+
+Page.beforeValidate( (page) => {
+  page.slug = slugify(page.title);
+})
 
 const User = db.define('user', {
   name: {
